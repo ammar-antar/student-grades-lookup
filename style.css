@@ -545,6 +545,24 @@ header p {
 
 /* ─── Responsive ─────────────────────────────────────────── */
 @media (max-width: 540px) {
+    .search-box {
+        flex-direction: column;
+        border-radius: var(--radius);
+        padding: 12px;
+        gap: 12px;
+    }
+
+    #studentIdInput {
+        padding: 10px;
+        text-align: center;
+        padding-left: 0;
+    }
+
+    #searchBtn {
+        width: 100%;
+        border-radius: 12px;
+    }
+
     .card-header {
         flex-direction: column;
         text-align: center;
