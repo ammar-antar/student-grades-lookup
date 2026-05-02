@@ -433,6 +433,55 @@ header p {
     color: var(--text);
 }
 
+/* Grade Badge */
+.grade-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 52px;
+    text-align: center;
+    direction: ltr;
+}
+
+.grade-excellent {
+    background: rgba(46, 204, 113, 0.15);
+    color: var(--green);
+    border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+.grade-very-good {
+    background: rgba(52, 152, 219, 0.15);
+    color: var(--blue);
+    border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+.grade-good {
+    background: rgba(241, 196, 15, 0.15);
+    color: var(--yellow);
+    border: 1px solid rgba(241, 196, 15, 0.3);
+}
+
+.grade-pass {
+    background: rgba(230, 126, 34, 0.15);
+    color: var(--orange);
+    border: 1px solid rgba(230, 126, 34, 0.3);
+}
+
+.grade-fail {
+    background: rgba(231, 76, 60, 0.15);
+    color: var(--red);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.grade-absent {
+    background: rgba(231, 76, 60, 0.22);
+    color: #ff6b6b;
+    border: 1px solid rgba(231, 76, 60, 0.4);
+    font-size: 11px;
+}
+
 /* GPA color helpers */
 .gpa-high {
     color: var(--green);

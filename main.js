@@ -6,18 +6,18 @@ let students = [];
 
 /* ─── Load JSON Data ────────────────────────────────────── */
 async function loadStudents() {
-  const indicator = document.getElementById('loadingIndicator');
-  indicator.innerHTML = '<span class="loading-pulse">⏳ جاري تحميل بيانات الطلاب...</span>';
+    const indicator = document.getElementById('loadingIndicator');
+    indicator.innerHTML = '<span class="loading-pulse">⏳ جاري تحميل بيانات الطلاب...</span>';
 
-  try {
-    const response = await fetch('students.json');
-    if (!response.ok) throw new Error('فشل تحميل الملف');
-    students = await response.json();
-    indicator.textContent = `✅ تم تحميل ${students.length} طالب بنجاح`;
-    setTimeout(() => { indicator.textContent = ''; }, 2500);
-  } catch (err) {
-    indicator.innerHTML = `<span style="color:var(--red)">❌ خطأ في تحميل البيانات: ${escHtml(err.message)}</span>`;
-  }
+    try {
+        const response = await fetch('students.json');
+        if (!response.ok) throw new Error('فشل تحميل الملف');
+        students = await response.json();
+        indicator.textContent = `✅ تم تحميل ${students.length} طالب بنجاح`;
+        setTimeout(() => { indicator.textContent = ''; }, 2500);
+    } catch (err) {
+        indicator.innerHTML = `<span style="color:var(--red)">❌ خطأ في تحميل البيانات: ${escHtml(err.message)}</span>`;
+    }
 }
 
 /* ─── Helpers ───────────────────────────────────────────── */
@@ -25,38 +25,38 @@ async function loadStudents() {
 
 /** Compute average of valid grades (skip -4 absent) */
 function computeStats(courses) {
-  const valid = courses.filter(c => c.grade !== -4);
-  if (valid.length === 0) return { avg: 0, total: 0, count: 0, highest: 0, absentCount: courses.length };
+    const valid = courses.filter(c => c.grade !== -4);
+    if (valid.length === 0) return { avg: 0, total: 0, count: 0, highest: 0, absentCount: courses.length };
 
-  const total   = valid.reduce((s, c) => s + c.grade, 0);
-  const avg     = total / valid.length;
-  const highest = Math.max(...valid.map(c => c.grade));
-  const absentCount = courses.length - valid.length;
+    const total = valid.reduce((s, c) => s + c.grade, 0);
+    const avg = total / valid.length;
+    const highest = Math.max(...valid.map(c => c.grade));
+    const absentCount = courses.length - valid.length;
 
-  return { avg: avg.toFixed(1), total: total.toFixed(1), count: valid.length, highest, absentCount };
+    return { avg: avg.toFixed(1), total: total.toFixed(1), count: valid.length, highest, absentCount };
 }
 
 /** Pick a colour class for the average */
 function avgClass(avg) {
-  const n = parseFloat(avg);
-  if (n >= 25) return 'gpa-high';
-  if (n >= 20) return 'gpa-mid';
-  if (n >= 15) return 'gpa-ok';
-  if (n >= 10) return 'gpa-low';
-  return 'gpa-fail';
+    const n = parseFloat(avg);
+    if (n >= 25) return 'gpa-high';
+    if (n >= 20) return 'gpa-mid';
+    if (n >= 15) return 'gpa-ok';
+    if (n >= 10) return 'gpa-low';
+    return 'gpa-fail';
 }
 
 /** Escape HTML to prevent XSS */
 function escHtml(str) {
-  return String(str).replace(/[&<>"']/g, ch => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[ch]));
+    return String(str).replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[ch]));
 }
 
 /* ─── Render Functions ──────────────────────────────────── */
 
 function renderSkeleton() {
-  return `
+    return `
     <div class="skeleton-card">
       <div class="skeleton-line title"></div>
       <div class="skeleton-line medium"></div>
@@ -70,7 +70,7 @@ function renderSkeleton() {
 }
 
 function renderNotFound(id) {
-  return `
+    return `
     <div class="not-found">
       <div class="icon">🔍</div>
       <h3>لم يتم العثور على الطالب</h3>
@@ -79,19 +79,22 @@ function renderNotFound(id) {
 }
 
 function renderStudent(student) {
-  const stats = computeStats(student.courses);
-  const ac    = avgClass(stats.avg);
+    const stats = computeStats(student.courses);
+    const ac = avgClass(stats.avg);
 
-  const rows = student.courses.map((c, i) => {
-    return `
+    const rows = student.courses.map((c, i) => {
+        const g = c.grade;
+        const cls = g === -4 ? 'grade-absent' : g < 10 ? 'grade-fail' : g < 15 ? 'grade-pass' : g < 20 ? 'grade-good' : g < 25 ? 'grade-very-good' : 'grade-excellent';
+        const label = g === -4 ? '🚫 محروم' : g;
+        return `
       <tr>
         <td>${i + 1}</td>
         <td><span class="course-name">${escHtml(c.course)}</span></td>
-        <td>${c.grade}</td>
+        <td><span class="grade-badge ${cls}">${label}</span></td>
       </tr>`;
-  }).join('');
+    }).join('');
 
-  return `
+    return `
     <div class="student-card">
       <div class="card-header">
         <div class="card-header-info">
@@ -137,50 +140,50 @@ function renderStudent(student) {
 
 /* ─── Search Logic ──────────────────────────────────────── */
 
-const input      = document.getElementById('studentIdInput');
-const btn        = document.getElementById('searchBtn');
+const input = document.getElementById('studentIdInput');
+const btn = document.getElementById('searchBtn');
 const resultArea = document.getElementById('resultArea');
-const validMsg   = document.getElementById('validationMsg');
+const validMsg = document.getElementById('validationMsg');
 
 function search() {
-  const raw = input.value.trim();
+    const raw = input.value.trim();
 
-  /* Validation */
-  if (!raw) {
-    validMsg.textContent = '⚠️ يرجى إدخال رقم الطالب أولاً';
-    input.focus();
-    return;
-  }
+    /* Validation */
+    if (!raw) {
+        validMsg.textContent = '⚠️ يرجى إدخال رقم الطالب أولاً';
+        input.focus();
+        return;
+    }
 
-  if (students.length === 0) {
-    validMsg.textContent = '⚠️ لم يتم تحميل البيانات بعد، يرجى الانتظار';
-    return;
-  }
+    if (students.length === 0) {
+        validMsg.textContent = '⚠️ لم يتم تحميل البيانات بعد، يرجى الانتظار';
+        return;
+    }
 
-  validMsg.textContent = '';
+    validMsg.textContent = '';
 
-  /* Show skeleton */
-  btn.disabled = true;
-  resultArea.innerHTML = renderSkeleton();
+    /* Show skeleton */
+    btn.disabled = true;
+    resultArea.innerHTML = renderSkeleton();
 
-  /* Simulate async search (brief loading feel) */
-  setTimeout(() => {
-    const searchId = parseInt(raw, 10);
-    const found = students.find(s => s.id === searchId);
-    resultArea.innerHTML = found ? renderStudent(found) : renderNotFound(raw);
-    btn.disabled = false;
-  }, 250);
+    /* Simulate async search (brief loading feel) */
+    setTimeout(() => {
+        const searchId = parseInt(raw, 10);
+        const found = students.find(s => s.id === searchId);
+        resultArea.innerHTML = found ? renderStudent(found) : renderNotFound(raw);
+        btn.disabled = false;
+    }, 250);
 }
 
 /* ─── Events ────────────────────────────────────────────── */
 btn.addEventListener('click', search);
 
 input.addEventListener('keydown', e => {
-  if (e.key === 'Enter') search();
+    if (e.key === 'Enter') search();
 });
 
 input.addEventListener('input', () => {
-  if (validMsg.textContent) validMsg.textContent = '';
+    if (validMsg.textContent) validMsg.textContent = '';
 });
 
 /* ─── Init ──────────────────────────────────────────────── */
