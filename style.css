@@ -1,0 +1,525 @@
+/* ═══════════════════════════════════════════════════════════
+   Student Grade Lookup — Design System
+═══════════════════════════════════════════════════════════ */
+
+/* ─── Design Tokens ─────────────────────────────────────── */
+:root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --card: #21253a;
+    --border: rgba(255, 255, 255, 0.07);
+    --accent: #6c63ff;
+    --accent2: #9b59b6;
+    --text: #e8eaf0;
+    --muted: #8b90a0;
+    --green: #2ecc71;
+    --yellow: #f1c40f;
+    --orange: #e67e22;
+    --red: #e74c3c;
+    --blue: #3498db;
+    --radius: 16px;
+    --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    --transition: 0.25s ease;
+}
+
+/* ─── Reset & Base ──────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 16px 80px;
+    direction: rtl;
+    background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(108, 99, 255, 0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 110%, rgba(155, 89, 182, 0.12) 0%, transparent 70%);
+}
+
+/* ─── Header ────────────────────────────────────────────── */
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+header .badge {
+    display: inline-block;
+    background: rgba(108, 99, 255, 0.15);
+    border: 1px solid rgba(108, 99, 255, 0.35);
+    color: #a8a4ff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+}
+
+header h1 {
+    font-size: clamp(26px, 5vw, 42px);
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 30%, #a8a4ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.3;
+}
+
+header p {
+    color: var(--muted);
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+.author {
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
+
+.author a {
+    display: inline-block;
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 4px 14px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: color var(--transition), background var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.author a:hover {
+    color: #a8a4ff;
+    background: rgba(108, 99, 255, 0.1);
+    border-color: rgba(108, 99, 255, 0.3);
+    box-shadow: 0 2px 12px rgba(108, 99, 255, 0.2);
+}
+
+/* ─── Search Box ─────────────────────────────────────────── */
+.search-wrapper {
+    width: 100%;
+    max-width: 540px;
+    margin-bottom: 32px;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 8px 20px 8px 8px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+    transition: border-color var(--transition), box-shadow var(--transition);
+    direction: ltr;
+}
+
+.search-box:focus-within {
+    border-color: rgba(108, 99, 255, 0.55);
+    box-shadow: 0 4px 28px rgba(108, 99, 255, 0.2);
+}
+
+#studentIdInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'Inter', 'Tajawal', sans-serif;
+    font-size: 15px;
+    text-align: left;
+    padding-left: 20px;
+    direction: ltr;
+}
+
+#studentIdInput::placeholder {
+    color: var(--muted);
+}
+
+#searchBtn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    border: none;
+    border-radius: 40px;
+    padding: 11px 26px;
+    font-family: 'Inter', 'Tajawal', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+    white-space: nowrap;
+}
+
+#searchBtn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 20px rgba(108, 99, 255, 0.45);
+}
+
+#searchBtn:active {
+    transform: scale(0.97);
+}
+
+#searchBtn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* ─── Validation Error ──────────────────────────────────── */
+#validationMsg {
+    color: var(--red);
+    font-size: 13px;
+    margin-top: 8px;
+    text-align: center;
+    min-height: 18px;
+    transition: opacity var(--transition);
+}
+
+/* ─── Loading Indicator ─────────────────────────────────── */
+#loadingIndicator {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 10px;
+    min-height: 18px;
+}
+
+/* ─── Result Area ────────────────────────────────────────── */
+#resultArea {
+    width: 100%;
+    max-width: 700px;
+}
+
+/* ─── Skeleton Loader ────────────────────────────────────── */
+.skeleton-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    animation: fadeIn 0.3s ease;
+}
+
+.skeleton-line {
+    height: 14px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #2a2e40 25%, #333849 50%, #2a2e40 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    margin-bottom: 14px;
+}
+
+.skeleton-line.short {
+    width: 45%;
+}
+
+.skeleton-line.medium {
+    width: 70%;
+}
+
+.skeleton-line.full {
+    width: 100%;
+}
+
+.skeleton-line.title {
+    height: 22px;
+    width: 55%;
+    margin-bottom: 24px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* ─── Not Found ─────────────────────────────────────────── */
+.not-found {
+    background: var(--card);
+    border: 1px solid rgba(231, 76, 60, 0.25);
+    border-radius: var(--radius);
+    padding: 36px 28px;
+    text-align: center;
+    animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: var(--shadow);
+}
+
+.not-found .icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.not-found h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--red);
+    margin-bottom: 8px;
+}
+
+.not-found p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* ─── Student Card ───────────────────────────────────────── */
+.student-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Card header gradient strip */
+.card-header {
+    background: linear-gradient(135deg, rgba(108, 99, 255, 0.22) 0%, rgba(155, 89, 182, 0.18) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 28px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+}
+
+.card-header-info h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.card-header-info .meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    padding: 3px 12px;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.chip span {
+    color: var(--text);
+    font-weight: 600;
+    direction: ltr;
+}
+
+/* Stats Row */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 1px solid var(--border);
+}
+
+.stat-item {
+    padding: 18px;
+    text-align: center;
+    border-left: 1px solid var(--border);
+}
+
+.stat-item:last-child {
+    border-left: none;
+}
+
+.stat-item .stat-value {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 3px;
+    direction: ltr;
+}
+
+.stat-item .stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+/* Courses Table */
+.card-body {
+    padding: 24px 28px 28px;
+}
+
+.section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 14px;
+}
+
+.courses-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.courses-table thead tr {
+    border-bottom: 1px solid var(--border);
+}
+
+.courses-table th {
+    text-align: right;
+    padding: 0 0 10px;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.courses-table th:first-child {
+    width: 40px;
+    text-align: center;
+}
+
+.courses-table th:last-child {
+    text-align: center;
+}
+
+.courses-table tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background var(--transition);
+}
+
+.courses-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.courses-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.courses-table td {
+    padding: 12px 0;
+    font-size: 14px;
+}
+
+.courses-table td:first-child {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.courses-table td:last-child {
+    text-align: center;
+}
+
+.course-name {
+    font-weight: 500;
+    color: var(--text);
+}
+
+/* GPA color helpers */
+.gpa-high {
+    color: var(--green);
+}
+
+.gpa-mid {
+    color: var(--blue);
+}
+
+.gpa-ok {
+    color: var(--yellow);
+}
+
+.gpa-low {
+    color: var(--orange);
+}
+
+.gpa-fail {
+    color: var(--red);
+}
+
+/* ─── Animations ─────────────────────────────────────────── */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Pulse for loading */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
+
+.loading-pulse {
+    animation: pulse 1.2s ease-in-out infinite;
+}
+
+/* ─── Responsive ─────────────────────────────────────────── */
+@media (max-width: 540px) {
+    .card-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 22px 16px 20px;
+    }
+
+    .card-header-info .meta {
+        justify-content: center;
+    }
+
+    .card-body {
+        padding: 20px 14px 24px;
+    }
+
+    .stats-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .stat-item .stat-value {
+        font-size: 18px;
+    }
+
+    .courses-table td,
+    .courses-table th {
+        font-size: 12px;
+    }
+}

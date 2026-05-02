@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>بحث درجات الطلاب</title>
+    <meta name="description" content="ابحث عن درجات الطالب باستخدام رقم القيد لعرض المقررات والدرجات" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap"
+        rel="stylesheet" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <header>
+        <div class="badge">🎓 البوابة الأكاديمية</div>
+        <div class="author">
+            <a href="mailto:ammaranter358@gmail.com?subject=Contact%20from%20Website&body=Hello%20Ammar">
+                Created by Ammar Antar
+            </a>
+        </div>
+        <h1>بحث درجات الطلاب</h1>
+        <p>أدخل رقم الجلوس الطالب لعرض المقررات والدرجات</p>
+    </header>
+
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" role="status" aria-live="polite"></div>
+
+    <!-- Search -->
+    <div class="search-wrapper">
+        <div class="search-box">
+            <input type="text" id="studentIdInput" placeholder="أدخل رقم القيد (مثال: 0000)" inputmode="numeric"
+                autocomplete="off" aria-label="رقم جلوس الطالب" />
+            <button id="searchBtn" aria-label="بحث">بحث</button>
+        </div>
+        <div id="validationMsg" role="alert" aria-live="polite"></div>
+    </div>
+
+    <!-- Result -->
+    <div id="resultArea" role="region" aria-live="polite"></div>
+
+    <!-- Script -->
+    <script src="main.js"></script>
+
+</body>
+
+</html>
